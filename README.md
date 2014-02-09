@@ -1,4 +1,4 @@
-datasciencecoursera
-===================
+ExData_Plotting1
+================
 
-Repository for Coursera Data Science specialization.
+Plotting Assignment 1 for Exploratory Data Analysis
