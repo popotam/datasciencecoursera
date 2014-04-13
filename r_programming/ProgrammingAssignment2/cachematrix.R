@@ -1,5 +1,5 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Please run unittest() to ensure that my code is correct
+
 
 ## Create a special "matrix" object that can cache its inverse.
 
@@ -34,7 +34,6 @@ cacheSolve <- function(x, ...) {
     x$setsolve(solve)
     solve
 }
-
 
 
 ## This function is a simple unittest for makeCacheMatrix and cacheSolve
