@@ -8,4 +8,19 @@ corr <- function(directory, threshold = 0) {
     ## nitrate and sulfate; the default is 0
     
     ## Return a numeric vector of correlations
+    
+    data = numeric(0)
+    for (i in 1:332) {
+        filename <- sprintf("%03d.csv", i)
+        filepath <- paste(directory, filename, sep = "/")
+        csv <- read.csv(filepath)
+        nobs <- !is.na(csv["sulfate"]) & !is.na(csv["nitrate"])
+        complete <- csv[nobs,]
+        if (dim(complete)[1] < threshold) {
+            next
+        }
+        corr <- cor(complete[["sulfate"]], complete[["nitrate"]])
+        data <- c(data, corr)
+    }
+    data
 }
