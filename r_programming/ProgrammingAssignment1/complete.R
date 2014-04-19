@@ -18,7 +18,7 @@ complete <- function(directory, id = 1:332) {
         filename <- sprintf("%03d.csv", i)
         filepath <- paste(directory, filename, sep = "/")
         csv <- read.csv(filepath)
-        nobs <- sum(!is.na(csv["sulfate"]) & !is.na(csv["nitrate"]))
+        nobs <- nrow(na.omit(csv))
         data <- rbind(data, c(i, nobs))
     }
     names(data) <- c("id", "nobs")

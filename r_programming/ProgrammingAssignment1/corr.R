@@ -14,9 +14,8 @@ corr <- function(directory, threshold = 0) {
         filename <- sprintf("%03d.csv", i)
         filepath <- paste(directory, filename, sep = "/")
         csv <- read.csv(filepath)
-        nobs <- !is.na(csv["sulfate"]) & !is.na(csv["nitrate"])
-        complete <- csv[nobs,]
-        if (dim(complete)[1] < threshold) {
+        complete <- na.omit(csv)
+        if (nrow(complete) < threshold) {
             next
         }
         corr <- cor(complete[["sulfate"]], complete[["nitrate"]])
