@@ -1,3 +1,4 @@
+library(reshape2)
 
 # The run_analysis function does the following:
 # 1. Merges the training and the test sets to create one data set.
@@ -7,16 +8,15 @@
 # 4. Appropriately labels the data set with descriptive activity names.
 # 5. Creates a second, independent tidy data set with the average of each
 #    variable for each activity and each subject.
+#
+# Function returns a list with following attributes:
+# $data     - cleaned data as described in points 1-4
+# $averages - data frame with variable averages for each activity/subject pair,
+#             as described in point 5
+# $saveData - a function that writes the above to disk
 
 run_analysis <- function() {
-    # read labels
-    activities <- read.table("UCI HAR Dataset//activity_labels.txt",
-                             col.names=c("activityID", "activityName"))
-    features <- read.table("UCI HAR Dataset//features.txt",
-                           col.names=c("featureID", "featureName"),
-                           stringsAsFactors=FALSE)
-
-    # merge train and test data
+    # Point 1 - merge train and test data
     data <- cbind(
         # subject column
         rbind(
@@ -34,7 +34,45 @@ run_analysis <- function() {
             read.table("UCI HAR Dataset//test//X_test.txt")
         )
     )
+
+    # Point 3 and 4 - add appropriate labels to data
+    # read labels
+    activities <- read.table("UCI HAR Dataset//activity_labels.txt",
+                             col.names=c("activityID", "activityName"))
+    features <- read.table("UCI HAR Dataset//features.txt",
+                           col.names=c("featureID", "featureName"),
+                           stringsAsFactors=FALSE)
     # add column names
-    colnames(data) <- c("subjectID", "activityID", features$featureName)
+    colnames(data) <- c("subject", "activity", features$featureName)
     # add labels to activities
+    data[,2] <- factor(data[,2], labels=activities[,2])
+
+    # Point 2 - drop columns that aren't mean or std
+    interesting_columns <- names(data)[
+        vapply(
+            names(data),
+            function(name) {
+                (grepl("mean", name, ignore.case=TRUE)
+                 | grepl("std", name, ignore.case=TRUE)
+                 | name == "activity"
+                 | name == "subject")
+            },
+            logical(1))
+        ]
+    data <- data[, interesting_columns]
+
+    # Point 5 - create a second data set with the average of each
+    #           variable for each activity and each subject.
+    melted <- melt(data, id=c('subject', 'activity'))
+    averages <- dcast(m, subject + activity ~ variable, mean)
+
+    # return a list with both datasets and a save function
+    list(
+        data = data,
+        averages = averages,
+        saveData = function() {
+            write.table(data, 'data.txt')
+            write.table(averages, 'averages.txt')
+        }
+    )
 }
