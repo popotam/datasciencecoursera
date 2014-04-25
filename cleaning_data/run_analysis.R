@@ -8,12 +8,6 @@ library(reshape2)
 # 4. Appropriately labels the data set with descriptive activity names.
 # 5. Creates a second, independent tidy data set with the average of each
 #    variable for each activity and each subject.
-#
-# Function returns a list with following attributes:
-# $data     - cleaned data as described in points 1-4
-# $averages - data frame with variable averages for each activity/subject pair,
-#             as described in point 5
-# $saveData - a function that writes the above to disk
 
 run_analysis <- function() {
     # Point 1 - merge train and test data
@@ -66,13 +60,6 @@ run_analysis <- function() {
     melted <- melt(data, id=c('subject', 'activity'))
     averages <- dcast(m, subject + activity ~ variable, mean)
 
-    # return a list with both datasets and a save function
-    list(
-        data = data,
-        averages = averages,
-        saveData = function() {
-            write.table(data, 'data.txt')
-            write.table(averages, 'averages.txt')
-        }
-    )
+    # return cleaned data set
+    averages
 }
