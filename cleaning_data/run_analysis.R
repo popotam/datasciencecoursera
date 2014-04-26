@@ -58,7 +58,7 @@ run_analysis <- function() {
     # Point 5 - create a second data set with the average of each
     #           variable for each activity and each subject.
     melted <- melt(data, id=c('subject', 'activity'))
-    averages <- dcast(m, subject + activity ~ variable, mean)
+    averages <- dcast(melted, subject + activity ~ variable, mean)
 
     # return cleaned data set
     averages
