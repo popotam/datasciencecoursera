@@ -42,17 +42,12 @@ run_analysis <- function() {
     data[,2] <- factor(data[,2], labels=activities[,2])
 
     # Point 2 - drop columns that aren't mean or std
-    interesting_columns <- names(data)[
-        vapply(
-            names(data),
-            function(name) {
-                (grepl("mean", name, ignore.case=TRUE)
-                 | grepl("std", name, ignore.case=TRUE)
-                 | name == "activity"
-                 | name == "subject")
-            },
-            logical(1))
-        ]
+    interesting_columns <- (
+        names(data) == "subject"
+        | names(data) == "activity"
+        | grepl("mean", names(data), ignore.case=TRUE)
+        | grepl("std", names(data), ignore.case=TRUE)
+    )
     data <- data[, interesting_columns]
 
     # Point 5 - create a second data set with the average of each
