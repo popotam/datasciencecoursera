@@ -48,7 +48,7 @@ Data Cleanup
 
 Data is cleaned in the following steps:
 
-* test data is merged with training data:
+* test data is merged with training data
 
     shape of the merged data:
 
