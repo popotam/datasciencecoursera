@@ -52,10 +52,10 @@ Data is cleaned in the following steps:
 
     shape of the merged data:
 
-    column 1      | column2 | columns3-563
-    --------------|---------|-------------
-    subject_train | y_train | X_train
-    subject_test  | y_test  | X_test
+    column 1      | column 2 | columns 3-563
+    --------------|----------|--------------
+    subject_train | y_train  | X_train
+    subject_test  | y_test   | X_test
 
 * feature labels and activity names are loaded and added to data
 
