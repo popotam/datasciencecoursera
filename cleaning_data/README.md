@@ -27,6 +27,7 @@ Scripts
 This script downloads and unzips the original dataset.
 
 Usage:
+
     > get_data()
 
 #### run_analysis.R
@@ -48,7 +49,6 @@ Data Cleanup
 Data is cleaned in the following steps:
 
 * test data is merged with training data:
-
 
     shape of the merged data:
 
