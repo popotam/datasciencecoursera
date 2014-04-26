@@ -61,7 +61,7 @@ Data is cleaned in the following steps:
 
 * features not containing 'mean' or 'std' are dropped, which leaves 86 features
 
-* reshape2 package is used to average the variables while groupping by subject/activity pair - this reduces number of rows from 10299 to 30 subjects * 6 activities = 180 rows
+* reshape2 package is used to average the variables while groupping by subject/activity pair - this reduces number of rows from 10299 to 180 (30 subjects * 6 activities = 180 rows)
 
 * cleaned data is returned
 
