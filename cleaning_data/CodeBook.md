@@ -1,5 +1,5 @@
-DATA DICTIONARY - SAMSUNG UCI HAR Dataset
-=========================================
+DATA DICTIONARY - UCI HAR Dataset
+=================================
 
 This data set contains cleaned data from SAMSUNG UCI HAR Dataset.
 

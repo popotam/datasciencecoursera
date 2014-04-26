@@ -1,12 +1,12 @@
-Cleaned and aggregated subset of SAMSUNG UCI HAR Dataset
-========================================================
+Cleaned SAMSUNG UCI HAR Dataset
+===============================
 
 Description
 -----------
 
 This data set contains cleaned data from SAMSUNG UCI HAR Dataset.
 
-A full description is available at the site where the data was obtained:
+A full description of SAMSUNG UCI HAR Dataset is available at the site where the data was obtained:
 
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
@@ -15,6 +15,7 @@ Original data can be found at:
 https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
 Data was cleaned by selecting 86 features and averaging them per subject/activity pair.
+
 Only features with 'mean' or 'std' in their name were taken.
 
 
