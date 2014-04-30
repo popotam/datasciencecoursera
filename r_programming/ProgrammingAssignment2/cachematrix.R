@@ -2,7 +2,11 @@
 
 
 ## Create a special "matrix" object that can cache its inverse.
-
+## CacheMatrix is a list object with the following methods:
+## get() - returns stored matrix
+## set() - store different matrix, invalidate cache
+## getsolve() - returns cached inverse value
+## setsolve() - sets a new cached inverse value
 makeCacheMatrix <- function(x = matrix()) {
     chachedSolve <- NULL
     set <- function(y) {
