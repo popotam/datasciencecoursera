@@ -12,8 +12,8 @@ get.data <- function(method = "curl") {
         method)
     unzip("dataset.zip")
     file.remove('dataset.zip')
-    # filter only 2007-01-01 and 2007-01-02
+    # filter only 2007-02-01 and 2007-02-02
     system("head -1 household_power_consumption.txt > data.csv")
-    system("grep '^[12]/1/2007' household_power_consumption.txt >> data.csv")
+    system("grep '^[12]/2/2007' household_power_consumption.txt >> data.csv")
     file.remove('household_power_consumption.txt')
 }
