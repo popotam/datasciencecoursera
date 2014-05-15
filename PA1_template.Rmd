@@ -1,20 +1,76 @@
-# Reproducible Research: Peer Assessment 1
+Reproducible Research: Peer Assessment 1
+========================================
+
+Loading and preprocessing the data
+-------------------------------------
+
+First, I have unziped the data file.
+
+```{r}
+unzip("activity.zip")
+```
+
+Data contains three columns:
+
+1. "steps" - integer number of steps taken during interval (contains NA values)
+
+2. "date" - isoformat date of measurement
+
+3. "interval" - interval number
+
+Steps and interval will be automatically read as integer values, but date
+needs to be processed.
+
+I load it as character value, by disabling stringsAsFactor option
+and then I convert it into
+
+```{r}
+# read data
+data <- read.csv("activity.csv")
+# convert "date" to Date class
+data$date <- as.Date(data$date)
+# prepare a copy of data with only complete rows
+completeData <- na.omit(data)
+```
 
 
-## Loading and preprocessing the data
+What is mean total number of steps taken per day?
+-------------------------------------------------
+
+I aggregate steps by date using only the complete measurements.
+
+```{r}
+stepsPerDay <- with(completeData, aggregate(steps, list(date), sum))
+names(stepsPerDay)[2] <- "steps"
+stepsMean <- mean(stepsPerDay$steps)
+stepsMedian <- median(stepsPerDay$steps)
+```
+
+The mean number of steps per day is
+`r format(stepsMean, scientific=F, nsmall=2)`
+and median is `r stepsMedian`.
+
+Let's see that on a histogram!
+
+```{r}
+hist(stepsPerDay$steps, col = "red", breaks = 20,
+     xlab = "Total number of steps per day",
+     main = "Histogram of total number of steps taken each day")
+abline(v=stepsMean, col="blue")
+abline(v=stepsMedian, col="green")
+```
 
 
 
-## What is mean total number of steps taken per day?
+What is the average daily activity pattern?
+-------------------------------------------
 
 
 
-## What is the average daily activity pattern?
+Imputing missing values
+-----------------------
 
 
 
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
+Are there differences in activity patterns between weekdays and weekends?
+-------------------------------------------------------------------------
