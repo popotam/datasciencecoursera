@@ -4,7 +4,7 @@ Reproducible Research: Peer Assessment 1
 Loading and preprocessing the data
 -------------------------------------
 
-First, I have unziped the data file.
+First, I have unzipped the data file.
 
 ```{r}
 unzip("activity.zip")
@@ -203,7 +203,9 @@ or weekend day.
 Sys.setlocale("LC_ALL", "en_US")
 
 # create new column
-filledData$weekPart <- factor(ifelse(weekdates(filledData$date) %in% c("Saturday", "Sunday"), "weekend", "weekday"))
+filledData$weekPart <- factor(ifelse(
+    weekdays(filledData$date) %in% c("Saturday", "Sunday"),
+    "weekend", "weekday"))
 
 # show that it is a factor
 str(filledData)
@@ -228,7 +230,7 @@ xyplot(steps ~ interval | weekPart, data=weekPartActivity,
        type="l", layout=c(1, 2))
 ```
 
-It seems that weedend and weekday activity patterns are different.
+It seems that weekend and weekday activity patterns are different.
 On weekdays there is a larger spike in the morning, but lower overall activity
-in the rest of the day. Weekend activity is more evenly spread out troughout
+in the rest of the day. Weekend activity is more evenly spread out throughout
 the day.
