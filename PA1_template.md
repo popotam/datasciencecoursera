@@ -124,6 +124,14 @@ measurements.
 ```r
 dailyActivity <- with(completeData, aggregate(steps, list(interval), mean))
 names(dailyActivity) <- c("interval", "steps")
+# preview data
+str(stepsPerDay)
+```
+
+```
+## 'data.frame':	53 obs. of  2 variables:
+##  $ date : Date, format: "2012-10-02" "2012-10-03" ...
+##  $ steps: int  126 11352 12116 13294 15420 11015 12811 9900 10304 17382 ...
 ```
 
 

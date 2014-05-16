@@ -90,6 +90,8 @@ measurements.
 ```{r}
 dailyActivity <- with(completeData, aggregate(steps, list(interval), mean))
 names(dailyActivity) <- c("interval", "steps")
+# preview data
+str(stepsPerDay)
 ```
 
 Let's see that on time series plot!
