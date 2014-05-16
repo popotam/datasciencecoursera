@@ -31,9 +31,6 @@ data <- read.csv("activity.csv")
 # convert "date" to Date class
 data$date <- as.Date(data$date)
 
-# prepare a copy of data with only complete rows
-completeData <- na.omit(data)
-
 # preview data
 str(data)
 ```

@@ -208,9 +208,6 @@ data &lt;- read.csv(&quot;activity.csv&quot;)
 # convert &#39;date&#39; to Date class
 data$date &lt;- as.Date(data$date)
 
-# prepare a copy of data with only complete rows
-completeData &lt;- na.omit(data)
-
 # preview data
 str(data)
 </code></pre>
