@@ -10,13 +10,13 @@ First, I have unzipped the data file.
 unzip("activity.zip")
 ```
 
-Data contains three columns:
+The variables included in this dataset are:
 
-1. "steps" - integer number of steps taken during interval (contains NA values)
+1. **steps**: Number of steps taking in a 5-minute interval (missing values are coded as NA)
 
-2. "date" - isoformat date of measurement
+2. **date**: The date on which the measurement was taken in YYYY-MM-DD format
 
-3. "interval" - interval number
+3. **interval**: Identifier for the 5-minute interval in which measurement was taken
 
 Steps and interval will be automatically read as integer values, but date
 needs to be processed.
@@ -67,9 +67,9 @@ stepsMedian <- median(stepsPerDay$steps)
 str(stepsPerDay)
 ```
 
-The *mean* number of steps per day is
+The **mean** number of steps per day is
 `r format(stepsMean, scientific=F, nsmall=2)`
-and *median* is `r format(stepsMedian, scientific=F, nsmall=2)`.
+and **median** is `r format(stepsMedian, scientific=F, nsmall=2)`.
 
 Let's see that on a histogram!
 
@@ -152,7 +152,7 @@ str(filledData)
 ```
 
 Now that we have completed data, let's repeat the calculation
-of *mean* and *median* total number of steps taken per day.
+of **mean** and **median** total number of steps taken per day.
 
 I aggregate steps by date using only the complete measurements.
 
@@ -169,9 +169,9 @@ stepsMedian2 <- median(stepsPerDay2$steps)
 str(stepsPerDay2)
 ```
 
-The *mean* number of steps per day is
+The **mean** number of steps per day is
 `r format(stepsMean2, scientific=F, nsmall=2)`
-and *median* is `r format(stepsMedian2, scientific=F, nsmall=2)`.
+and **median** is `r format(stepsMedian2, scientific=F, nsmall=2)`.
 
 Let's see that on a histogram!
 
@@ -184,7 +184,7 @@ abline(v=stepsMedian2, col="green")
 rug(stepsPerDay2$steps)
 ```
 
-It seems that *mean* and *median* have not changed much. Filling data using my
+It seems that **mean** and **median** have not changed much. Filling data using my
 method resulted in adding `r numberOfNAperDaySums` days to the central bin.
 
 

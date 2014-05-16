@@ -4,7 +4,7 @@ Reproducible Research: Peer Assessment 1
 Loading and preprocessing the data
 -------------------------------------
 
-First, I have unziped the data file.
+First, I have unzipped the data file.
 
 
 ```r
@@ -12,13 +12,13 @@ unzip("activity.zip")
 ```
 
 
-Data contains three columns:
+The variables included in this dataset are:
 
-1. "steps" - integer number of steps taken during interval (contains NA values)
+1. **steps**: Number of steps taking in a 5-minute interval (missing values are coded as NA)
 
-2. "date" - isoformat date of measurement
+2. **date**: The date on which the measurement was taken in YYYY-MM-DD format
 
-3. "interval" - interval number
+3. **interval**: Identifier for the 5-minute interval in which measurement was taken
 
 Steps and interval will be automatically read as integer values, but date
 needs to be processed.
@@ -97,9 +97,9 @@ str(stepsPerDay)
 ```
 
 
-The *mean* number of steps per day is
+The **mean** number of steps per day is
 10766.19
-and *median* is 10765.
+and **median** is 10765.
 
 Let's see that on a histogram!
 
@@ -202,7 +202,7 @@ str(filledData)
 
 
 Now that we have completed data, let's repeat the calculation
-of *mean* and *median* total number of steps taken per day.
+of **mean** and **median** total number of steps taken per day.
 
 I aggregate steps by date using only the complete measurements.
 
@@ -227,9 +227,9 @@ str(stepsPerDay2)
 ```
 
 
-The *mean* number of steps per day is
+The **mean** number of steps per day is
 10766.19
-and *median* is 10766.19.
+and **median** is 10766.19.
 
 Let's see that on a histogram!
 
@@ -245,7 +245,7 @@ rug(stepsPerDay2$steps)
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
 
 
-It seems that *mean* and *median* have not changed much. Filling data using my
+It seems that **mean** and **median** have not changed much. Filling data using my
 method resulted in adding 8 days to the central bin.
 
 
@@ -321,7 +321,7 @@ xyplot(steps ~ interval | weekPart, data = weekPartActivity, type = "l", layout 
 ![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
 
 
-It seems that weedend and weekday activity patterns are different.
+It seems that weekend and weekday activity patterns are different.
 On weekdays there is a larger spike in the morning, but lower overall activity
-in the rest of the day. Weekend activity is more evenly spread out troughout
+in the rest of the day. Weekend activity is more evenly spread out throughout
 the day.
