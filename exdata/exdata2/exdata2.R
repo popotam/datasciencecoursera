@@ -83,14 +83,20 @@ plot3 <- function() {
     data <- aggregate(data$Emissions, by=list(data$year, data$type), sum)
     names(data) <- c('Year', 'Type', 'Emissions')
 
-    # create png file with plot
+    # create plot definition
+    plot <- (
+        ggplot(
+            data,
+            aes(x=Year, y=Emissions, colour=Type)
+        )
+        + geom_line()
+        + theme_bw()
+        + ggtitle("Total Emissions per Year in Baltimore City")
+    )
+
+    # print plot to a png file
     png("plot3.png", bg = "transparent")
-
-    ggplot(
-        data,
-        aes(x=Year, y=Emissions, colour=Type)
-    ) + geom_line() + theme_bw()
-
+    print(plot)
     dev.off()
 }
 
@@ -102,21 +108,34 @@ plot4 <- function() {
     
     # load data if not loaded yet
     if (!exists('NEI') | !exists('SCC')) load.data()
-    
-    # filter data to Baltimore
-    data <- with(NEI, NEI[fips == "24510",])
-    
-    # aggregate data - sum Emissions by year and by type
-    data <- aggregate(data$Emissions, by=list(data$year, data$type), sum)
-    names(data) <- c('Year', 'Type', 'Emissions')
-    
-    # create plot definition
-    plot <- ggplot(
-        data,
-        aes(x=Year, y=Emissions, colour=Type)
-    ) + geom_line() + theme_bw()
 
-    # print plot to a png file    
+    # find all coal combustion related SCCs
+    description <- with(SCC, paste(Short.Name, EI.Sector, SCC.Level.One,
+                                   SCC.Level.Two, SCC.Level.Three,
+                                   SCC.Level.Four))
+    match <- grepl("Coal", description) & grepl("Comb", description)
+    coal.comb <- SCC[match,][["SCC"]]
+
+    # filter data to coal combustion related
+    data <- with(NEI, NEI[SCC %in% coal.comb,])
+
+    # aggregate data - sum emissions by year
+    data <- aggregate(data$Emissions, by=list(data$year), sum)
+    names(data) <- c('Year', 'Emissions')
+
+    # create plot definition
+    plot <- (
+        ggplot(
+            data,
+            aes(x=Year, y=Emissions),
+        )
+        + geom_line()
+        + theme_bw()
+        + ylim(0, 1.2 * max(data$Emissions))
+        + ggtitle("Coal Combustion Related Emissions per Year")
+    )
+
+    # print plot to a png file
     png("plot4.png", bg = "transparent")
     print(plot)
     dev.off()
