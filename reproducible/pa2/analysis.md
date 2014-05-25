@@ -1,0 +1,107 @@
+US Catasthrophes: Tornados are Deadliest and Floods Most Destructive
+====================================================================
+
+In this study we take a look at U.S. National Oceanic and Atmospheric
+Administration's (NOAA) storm database, which collects events ranging
+from the year 1950 to November 2011. Our goal was to find out which
+events are most damaging to health, life and property.
+
+In the course of the study, we have found out that tornados are responsible
+for the highest number of storm related deaths and injuries.
+We have also found out that floods are most damaging property-wise.
+
+Data Processing
+---------------
+
+First we have downloaded and extracted the NOAA data.
+
+Data is compressed using bz2 format. To uncompress it we have used **bunzip()**
+function from the **"R.utils"** package.
+
+Then, load the uncompressed CSV file and sum total fatalities, injuries
+and property damage by event type across United States.
+
+
+```r
+library(R.utils)
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", 
+    destfile = "repdata-data-StormData.csv.bz2", method = "curl")
+bunzip2("repdata-data-StormData.csv.bz2")
+```
+
+```
+## Error: File already exists: repdata-data-StormData.csv
+```
+
+```r
+data <- read.csv("repdata-data-StormData.csv")
+
+# aggregate data
+events = aggregate(data[, c("FATALITIES", "INJURIES", "PROPDMG")], by = list(data$EVTYPE), 
+    sum)
+names(events) <- c("Event", "Fatalities", "Injuries", "Prop.Dmg")
+```
+
+
+Results
+-------
+
+### Across the United States, which types of severe weather are most harmful with respect to population health?
+
+
+```r
+# analyse injuries
+total.injuries <- sum(events$Injuries)
+top.10.injuries <- events[order(events$Injuries, decreasing = TRUE)[1:10], c("Event", 
+    "Injuries")]
+top.injuries.evname <- top.10.injuries$Event[1]
+top.injuries.fraction <- top.10.injuries$Injuries[1]/total.injuries
+
+# display plot
+par(las = 2, mar = c(9, 4, 4, 2))
+with(top.10.injuries, barplot(height = Injuries, names.arg = Event, col = "wheat", 
+    main = "Storm Related Injuries across United States"), )
+```
+
+![plot of chunk injuries](figure/injuries.png) 
+
+
+
+
+```r
+# analyse fatalities
+total.fatalities <- sum(events$Fatalities)
+top.10.fatalities <- events[order(events$Fatalities, decreasing = TRUE)[1:10], 
+    c("Event", "Fatalities")]
+top.fatalities.evname <- top.10.fatalities$Event[1]
+top.fatalities.fraction <- top.10.fatalities$Fatalities[1]/total.fatalities
+
+# display plot
+par(las = 2, mar = c(9, 4, 4, 2))
+with(top.10.fatalities, barplot(height = Fatalities, names.arg = Event, col = "wheat", 
+    main = "Storm Related Fatalities across United States"), )
+```
+
+![plot of chunk fatalities](figure/fatalities.png) 
+
+
+
+
+
+
+```r
+# analyse prop.dmg
+total.prop.dmg <- sum(events$Prop.Dmg)
+top.10.prop.dmg <- events[order(events$Prop.Dmg, decreasing = TRUE)[1:10], c("Event", 
+    "Prop.Dmg")]
+top.prop.dmg.evname <- top.10.prop.dmg$Event[1]
+top.prop.dmg.fraction <- top.10.prop.dmg$Prop.Dmg[1]/total.prop.dmg
+
+# display plot
+par(las = 2, mar = c(9, 4, 4, 2))
+with(top.10.prop.dmg, barplot(height = Prop.Dmg, names.arg = Event, col = "wheat", 
+    main = "Storm Related Property Damage across United States"), )
+```
+
+![plot of chunk prop.dmg](figure/prop_dmg.png) 
+
