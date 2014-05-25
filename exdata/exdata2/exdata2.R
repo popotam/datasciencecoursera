@@ -75,10 +75,10 @@ plot3 <- function() {
 
     # load data if not loaded yet
     if (!exists('NEI') | !exists('SCC')) load.data()
-    
+
     # filter data to Baltimore
     data <- with(NEI, NEI[fips == "24510",])
-    
+
     # aggregate data - sum Emissions by year and by type
     data <- aggregate(data$Emissions, by=list(data$year, data$type), sum)
     names(data) <- c('Year', 'Type', 'Emissions')
@@ -105,7 +105,7 @@ plot3 <- function() {
 # combustion-related sources changed from 1999–2008?
 plot4 <- function() {
     library(ggplot2)
-    
+
     # load data if not loaded yet
     if (!exists('NEI') | !exists('SCC')) load.data()
 
@@ -144,6 +144,40 @@ plot4 <- function() {
 
 # How have emissions from motor vehicle sources changed
 # from 1999–2008 in Baltimore City?
+plot5 <- function() {
+    library(ggplot2)
+
+    # load data if not loaded yet
+    if (!exists('NEI') | !exists('SCC')) load.data()
+
+    # find all motor vehicle related SCCs
+    motor <- SCC[grepl("Highway Veh", SCC$Short.Name),][["SCC"]]
+
+    # filter data to motor related in Baltimore
+    data <- with(NEI, NEI[SCC %in% motor & fips == "24510",])
+
+    # aggregate data - sum emissions by year
+    data <- aggregate(data$Emissions, by=list(data$year), sum)
+    names(data) <- c('Year', 'Emissions')
+
+    # create plot definition
+    plot <- (
+        ggplot(
+            data,
+            aes(x=Year, y=Emissions),
+        )
+        + geom_line()
+        + theme_bw()
+        + ylim(0, 1.2 * max(data$Emissions))
+        + ggtitle("Motor Vehicle Related Emissions per Year")
+    )
+
+    # print plot to a png file
+    png("plot5.png", bg = "transparent")
+    print(plot)
+    dev.off()
+}
+
 
 # Compare emissions from motor vehicle sources in Baltimore City
 # with emissions from motor vehicle sources in Los Angeles County, California (fips == "06037"). Which city has seen greater changes over time in motor vehicle emissions?
