@@ -18,7 +18,7 @@ plot1 <- function() {
     names(data) <- c('Year', 'Emissions')
 
     # create png file with plot
-    png("plot1.png", bg = "transparent")
+    png("plot1.png")
     with(
         data,
         plot(
@@ -48,7 +48,7 @@ plot2 <- function() {
     names(data) <- c('Year', 'Emissions')
 
     # create png file with plot
-    png("plot2.png", bg = "transparent")
+    png("plot2.png")
     with(
         data,
         plot(
@@ -95,7 +95,7 @@ plot3 <- function() {
     )
 
     # print plot to a png file
-    png("plot3.png", bg = "transparent")
+    png("plot3.png", width = 600, units = "px")
     print(plot)
     dev.off()
 }
@@ -136,7 +136,7 @@ plot4 <- function() {
     )
 
     # print plot to a png file
-    png("plot4.png", bg = "transparent")
+    png("plot4.png")
     print(plot)
     dev.off()
 }
@@ -173,11 +173,50 @@ plot5 <- function() {
     )
 
     # print plot to a png file
-    png("plot5.png", bg = "transparent")
+    png("plot5.png")
     print(plot)
     dev.off()
 }
 
 
 # Compare emissions from motor vehicle sources in Baltimore City
-# with emissions from motor vehicle sources in Los Angeles County, California (fips == "06037"). Which city has seen greater changes over time in motor vehicle emissions?
+# with emissions from motor vehicle sources in Los Angeles County,
+# California (fips == "06037"). Which city has seen greater changes
+# over time in motor vehicle emissions?
+plot6 <- function() {
+    library(ggplot2)
+
+    # load data if not loaded yet
+    if (!exists('NEI') | !exists('SCC')) load.data()
+
+    # find all motor vehicle related SCCs
+    motor <- SCC[grepl("Highway Veh", SCC$Short.Name),][["SCC"]]
+
+    # filter data to motor related in Baltimore or Los Angeles
+    data <- with(
+        NEI,
+        NEI[SCC %in% motor & (fips == "24510" | fips == "06037"),]
+    )
+
+    # aggregate data - sum emissions by year and city
+    data <- aggregate(data$Emissions, by=list(data$year, data$fips), sum)
+    names(data) <- c('Year', 'City', 'Emissions')
+    data$City <- ifelse(data$City == "24510", "Baltimore", "Los Angeles")
+
+    # create plot definition
+    plot <- (
+        ggplot(
+            data,
+            aes(x=Year, y=Emissions, colour=City)
+        )
+        + geom_line()
+        + theme_bw()
+        + ylim(0, 1.2 * max(data$Emissions))
+        + ggtitle("Motor Vehicle Related Emissions per Year")
+    )
+
+    # print plot to a png file
+    png("plot6.png", width = 600, units = "px")
+    print(plot)
+    dev.off()
+}
