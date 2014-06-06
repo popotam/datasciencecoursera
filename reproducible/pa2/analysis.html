@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta http-equiv="x-ua-compatible" content="IE=9" >
 
-<title>US Catasthrophes: Tornados are Deadliest; Floods Most Destructive</title>
+<title>US Catasthrophes: Tornados are Deadliest and Most Destructive</title>
 
 <style type="text/css">
 body, td {
@@ -179,7 +179,7 @@ hljs.initHighlightingOnLoad();
 </head>
 
 <body>
-<h1>US Catasthrophes: Tornados are Deadliest; Floods Most Destructive</h1>
+<h1>US Catasthrophes: Tornados are Deadliest and Most Destructive</h1>
 
 <p>In this study we take a look at U.S. National Oceanic and Atmospheric
 Administration&#39;s (NOAA) storm database, which collects severe weather
@@ -188,8 +188,7 @@ Our goal was to find out which events are most damaging
 to health, life and property.</p>
 
 <p>In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.</p>
+for the highest number of weather related deaths, injuries and property damage.</p>
 
 <h2>Data Processing</h2>
 
@@ -205,12 +204,7 @@ injuries and property damage by event type across the United States.</p>
 download.file(&quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&quot;, 
     destfile = &quot;repdata-data-StormData.csv.bz2&quot;, method = &quot;curl&quot;)
 bunzip2(&quot;repdata-data-StormData.csv.bz2&quot;)
-</code></pre>
-
-<pre><code>## Error: File already exists: repdata-data-StormData.csv
-</code></pre>
-
-<pre><code class="r">data &lt;- read.csv(&quot;repdata-data-StormData.csv&quot;)
+data &lt;- read.csv(&quot;repdata-data-StormData.csv&quot;)
 
 # aggregate data
 events = aggregate(data[, c(&quot;FATALITIES&quot;, &quot;INJURIES&quot;, &quot;PROPDMG&quot;)], by = list(data$EVTYPE), 
@@ -247,7 +241,7 @@ injuries caused by severe weather
 were caused by <strong>tornados</strong>, which is
 <strong>65.00%</strong> of total.</p>
 
-<p>Now, let&#39;s look at injuries across the United States:</p>
+<p>Now, let&#39;s look at fatalities across the United States:</p>
 
 <pre><code class="r"># analyse fatalities
 total.fatalities &lt;- sum(events$Fatalities)
@@ -306,8 +300,7 @@ types across the US in terms of property damage.</p>
 <h2>Conclusion</h2>
 
 <p>In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.</p>
+for the highest number of weather related deaths, injuries and property damage.</p>
 
 </body>
 

@@ -1,5 +1,5 @@
-US Catasthrophes: Tornados are Deadliest; Floods Most Destructive
-=================================================================
+US Catasthrophes: Tornados are Deadliest and Most Destructive
+=============================================================
 
 In this study we take a look at U.S. National Oceanic and Atmospheric
 Administration's (NOAA) storm database, which collects severe weather
@@ -8,8 +8,7 @@ Our goal was to find out which events are most damaging
 to health, life and property.
 
 In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.
+for the highest number of weather related deaths, injuries and property damage.
 
 Data Processing
 ---------------
@@ -28,13 +27,6 @@ library(R.utils)
 download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", 
     destfile = "repdata-data-StormData.csv.bz2", method = "curl")
 bunzip2("repdata-data-StormData.csv.bz2")
-```
-
-```
-## Error: File already exists: repdata-data-StormData.csv
-```
-
-```r
 data <- read.csv("repdata-data-StormData.csv")
 
 # aggregate data
@@ -77,7 +69,7 @@ injuries caused by severe weather
 were caused by **tornados**, which is
 **65.00%** of total.
 
-Now, let's look at injuries across the United States:
+Now, let's look at fatalities across the United States:
 
 
 ```r
@@ -143,5 +135,4 @@ Conclusion
 ----------
 
 In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.
+for the highest number of weather related deaths, injuries and property damage.

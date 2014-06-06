@@ -1,5 +1,5 @@
-US Catasthrophes: Tornados are Deadliest; Floods Most Destructive
-=================================================================
+US Catasthrophes: Tornados are Deadliest and Most Destructive
+=============================================================
 
 In this study we take a look at U.S. National Oceanic and Atmospheric
 Administration's (NOAA) storm database, which collects severe weather
@@ -8,8 +8,7 @@ Our goal was to find out which events are most damaging
 to health, life and property.
 
 In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.
+for the highest number of weather related deaths, injuries and property damage.
 
 Data Processing
 ---------------
@@ -22,7 +21,7 @@ function from the **"R.utils"** package.
 Then, we have loaded the uncompressed CSV file and summed total fatalities,
 injuries and property damage by event type across the United States.
 
-```{r preprocessing, cache=TRUE}
+```{r preprocessing, cache=TRUE, errors=FALSE, warning=FALSE, message=FALSE}
 library(R.utils)
 download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
               destfile = "repdata-data-StormData.csv.bz2", method = "curl")
@@ -67,7 +66,7 @@ injuries caused by severe weather
 were caused by **`r top.injuries.evname`s**, which is
 **`r format(100 * top.injuries.fraction, scientific=F, nsmall=2)`%** of total.
 
-Now, let's look at injuries across the United States:
+Now, let's look at fatalities across the United States:
 
 ```{r fatalities, fig.width=7, fig.height=6}
 # analyse fatalities
@@ -131,5 +130,4 @@ Conclusion
 ----------
 
 In the course of the study, we have found out that tornados are responsible
-for the highest number of weather related deaths and injuries.
-We have also found out that floods are most damaging property-wise.
+for the highest number of weather related deaths, injuries and property damage.
