@@ -1,0 +1,128 @@
+---
+title: "Motor Trends: Automatic or a Stick? It doesn't matter."
+output: pdf_document
+---
+
+Summary
+-------
+
+We take a look at some historical data (the 1974 Motor Trend US magazine car
+road tests) and try to answer what car characterstics influence fuel confumption
+(measured in Miles per Gallon). We will take a closer look on the relation
+between transmission type (auto or stick) and car's MPG and observe that if
+we include other important variables like car's weight and number of cylinders
+in car's engine, then the relation between transmission type and fuel consumption
+is insignificant.
+
+Exploratory Analysis
+--------------------
+
+First, we take a look at the data to see if there are some obvious correlations.
+
+```{r}
+data(mtcars)
+pairs(mtcars)
+```
+
+Let's see correlation table for completeness:
+```{r}
+cor(mtcars)
+```
+
+MPG seems to be highly correlated with number of cylinders (cyl), displacement
+(disp), horsepower (hp) and weight (wt), so we will use those variables in our
+regression models. Transmission type doesn't seem to be highly correlated, but
+we will include it in our model to be able to answer our research question.
+
+
+Models
+------
+
+We will create a series of regression models of increasing complexity.
+We will start with the simplest one, where the MPG is being explained only
+by the transmission type.
+
+```{r}
+fit <- lm(mpg ~ am, data = mtcars)
+summary(fit)
+```
+
+This simple model is highly interpretable - intercept coeficient is
+`r coef(fit)[1]`, which means that a car with automatic transmission
+(am == 0) is expected to drive `r coef(fit)[1]` miles per gallon and am
+coefficient is `r coef(fit)[2]`, which means that a car with manual
+transmission (am == 1) is expected to drive `r coef(fit)[2]` more miles per gallon.
+All p-values are much lower than 0.05, so the model seems to be strong, but
+the variation explained (R-squared) is only `r summary(fit)$r.squared`, so we
+need to include more variables to have a more complete view on cars' MPG.
+
+Let's see the relation beetween transmission type and MPG on a plot.
+```{r}
+plot(mtcars$am, mtcars$mpg, xlab="Transmission Type", ylab="MPG", main="MPG vs Transmission Type")
+abline(fit)
+```
+
+
+We will try to create a series of more complex models to get a better view on
+fuel consumption.
+We will regress on variables centered on mean or minimal value of those
+variables, so the intercept would remain interpretable - it doesn't have sense
+to have an intercept that is a MPG value for car with zero horsepower,
+zero weight and zero cylinders, but it does have sense to have an intercept as
+a value for car with mean horsepower (`r mean(mtcars$hp)` HP) and weight
+(`r mean(mtcars$wt)*1000` lb) and minimal number of cylinders
+(`r min(mtcars$cyl)` cylinders).
+
+```{r}
+mtcars$cyl.2 <- mtcars$cyl - min(mtcars$cyl)
+mtcars$disp.2 <- mtcars$disp - mean(mtcars$disp)
+mtcars$hp.2 <- mtcars$hp - mean(mtcars$hp)
+mtcars$wt.2 <- (mtcars$wt - mean(mtcars$wt)) * 1000 # also scale to lb
+```
+
+We add variables to regressin model in order of correlation and test their
+significance using ANOVA test:
+```{r}
+fit2 <- lm(mpg ~ am + wt.2, data = mtcars)
+fit3 <- lm(mpg ~ am + wt.2 + cyl.2, data = mtcars)
+fit4 <- lm(mpg ~ am + wt.2 + cyl.2 + disp.2, data = mtcars)
+fit5 <- lm(mpg ~ am + wt.2 + cyl.2 + disp.2 + hp.2, data = mtcars)
+anova(fit, fit2, fit3, fit4, fit5)
+```
+
+As we can see, adding weight and cylinder information results with significanlty
+better models (p-value < 0.05) and adding displacement and horse power does not.
+In result, we use fit3 model using transmission type, weight and number
+of cylinders as our final model.
+
+Let's see it's details:
+```{r}
+summary(fit3)
+```
+
+The intercept intercept coeficient is
+`r coef(fit)[1]`, which means that a car with automatic transmission
+(am == 0), `r min(mtcars$cyl)` cylinder engine and average weight is
+expected to have fuel efficiency of `r coef(fit3)[1]` miles per gallon.
+
+The transmission type coefficient is only `r coef(fit3)[2]` and in the first
+model it was `r coef(fit)[1]`, which means that the newly added variables
+(weight and number of cylinders were confounding the transmission type variable).
+The p-value of this coefficient is very high (0.89334), so it means that after
+taking an account of car's weight and number of cylinders the relation between
+MPG and transmission type diminishes.
+
+The final model seems to be strong with R-squared value of
+`r summary(fit3)$r.squared' and resudual plot without anomalies:
+
+```{r}
+plot(fit3, which = 1)
+```
+
+Conclusion
+----------
+
+Is an automatic or manual transmission better for MPG?
+On the surface, there is a difference, but if you look in depth
+and take an account for car's weight and engine's number of cylinders,
+the transmission type of your car doesn't matter.
