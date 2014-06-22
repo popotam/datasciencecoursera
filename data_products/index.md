@@ -63,4 +63,4 @@ Grossly overfitted ;(
 <br/>
 # https://popotam.shinyapps.io/data_products/
 <br/>
-You will be able to fiddle with noise and polynomial degree.
+You will be able to fiddle with noise and degree of polynomial regression.
