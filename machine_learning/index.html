@@ -148,8 +148,8 @@ out.of.sample.error</code></pre>
 <p>I classify the test data using my model:</p>
 <pre class="r"><code>prediction &lt;- as.character(predict(fit, testing))
 prediction</code></pre>
-<pre><code>##  [1] &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;B&quot;
-## [18] &quot;A&quot; &quot;B&quot; &quot;A&quot;</code></pre>
+<pre><code>##  [1] &quot;B&quot; &quot;A&quot; &quot;B&quot; &quot;A&quot; &quot;A&quot; &quot;E&quot; &quot;D&quot; &quot;B&quot; &quot;A&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;B&quot; &quot;A&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot;
+## [18] &quot;B&quot; &quot;B&quot; &quot;B&quot;</code></pre>
 <p>I save prediction to txt files:</p>
 <pre class="r"><code>pml_write_files = function(x){
   n = length(x)
