@@ -1,0 +1,105 @@
+---
+title: "Weight Lifting Exercise Prediction"
+output: html_document
+---
+
+Load and Clenup the Data
+------------------------
+
+First, I load training and testing datasets.
+
+```{r}
+training <- read.csv('pml-training.csv')
+testing <- read.csv('pml-testing.csv')
+```
+
+I select the columns that are usable for constructing the prediction model.
+I chose _roll_, _pitch_, _gyros{x,y,z}_, _accel{x,y,z}_ and _magnet{x,y,z}_
+for each body part, that is _belt_, _arm_, _dumbbell_ and _forearm_.
+
+```{r}
+features <- c(
+    # belt
+    'roll_belt', 'pitch_belt', 'yaw_belt',
+    'gyros_belt_x', 'gyros_belt_y', 'gyros_belt_z',
+    'accel_belt_x', 'accel_belt_y', 'accel_belt_z',
+    'magnet_belt_x', 'magnet_belt_y', 'magnet_belt_z',
+    # arm
+    'roll_arm', 'pitch_arm', 'yaw_arm',
+    'gyros_arm_x', 'gyros_arm_y', 'gyros_arm_z',
+    'accel_arm_x', 'accel_arm_y', 'accel_arm_z',
+    'magnet_arm_x', 'magnet_arm_y', 'magnet_arm_z',
+    # dumbbell
+    'roll_dumbbell', 'pitch_dumbbell', 'yaw_dumbbell',
+    'gyros_dumbbell_x', 'gyros_dumbbell_y', 'gyros_dumbbell_z',
+    'accel_dumbbell_x', 'accel_dumbbell_y', 'accel_dumbbell_z',
+    'magnet_dumbbell_x', 'magnet_dumbbell_y', 'magnet_dumbbell_z',
+    # forearm
+    'roll_forearm', 'pitch_forearm', 'yaw_forearm',
+    'gyros_forearm_x', 'gyros_forearm_y', 'gyros_forearm_z',
+    'accel_forearm_x', 'accel_forearm_y', 'accel_forearm_z',
+    'magnet_forearm_x', 'magnet_forearm_y', 'magnet_forearm_z'
+    )
+training <- training[, c('classe', features)]
+testing <- testing[, features]
+```
+
+Build Prediction Model
+----------------------
+
+I have chosen the Support Vector Machine with Radial Basis Function Kernel (SVM)
+as a prediction engine.
+I have used 10 fold cross-validation to estimate out-of-sample error.
+
+```{r}
+
+library(caret)
+set.seed(123456)
+fitControl <- trainControl(
+    ## 10-fold CV
+    method = "cv",
+    number = 10,
+)
+fit <- train(
+    classe ~ .,
+    data = training,
+    method = "svmRadial",
+    preProc = c("center", "scale"),
+    tuneLength = 8,
+    trainControl = fitControl
+)
+fit
+```
+
+Final model out-of-sample error estimation is `r 1-getTrainPerf(fit)$TrainAccuracy` as calculated in:
+```{r}
+getTrainPerf(fit)
+```
+
+```{r}
+out.of.sample.error <- 1 - getTrainPerf(fit)$TrainAccuracy
+out.of.sample.error
+```
+
+Predicting the Test Data
+------------------------
+
+I classify the test data using my model:
+
+```{r}
+prediction <- as.character(predict(fit, testing))
+prediction
+```
+
+I save prediction to txt files:
+
+```{r}
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+pml_write_files(prediction)
+```
