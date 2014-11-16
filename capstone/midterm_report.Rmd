@@ -64,9 +64,9 @@ the entire dataset will be done only once.
 
 ```{r preprocessing, cache=TRUE, errors=FALSE, warning=FALSE, message=FALSE, results='asis'}
 # load data
-blogs <- readLines(file("final/en_US/en_US.blogs.txt", encoding = "UTF-8"), n = 10000)
-news <- readLines(file("final/en_US/en_US.news.txt", encoding = "UTF-8"), n = 10000)
-twitter <- readLines(file("final/en_US/en_US.twitter.txt", encoding = "UTF-8"), n = 10000)
+blogs <- readLines(file("final/en_US/en_US.blogs.txt", encoding = "UTF-8"))
+news <- readLines(file("final/en_US/en_US.news.txt", encoding = "UTF-8"))
+twitter <- readLines(file("final/en_US/en_US.twitter.txt", encoding = "UTF-8"))
 blogs <- iconv(blogs, from = "latin1", to = "UTF-8", sub="")
 news <- iconv(news, from = "latin1", to = "UTF-8", sub="")
 twitter <- iconv(twitter, from = "latin1", to = "UTF-8", sub="")
@@ -100,9 +100,9 @@ summary$characters.per.line <- summary$characters / summary$lines
 summary$characters.per.word <- (summary$characters - summary$whitespace) / summary$words
 
 # extract samples from data
-blogs = sample(blogs, 1000)
-news = sample(news, 1000)
-twitter = sample(twitter, 1000)
+blogs <- sample(blogs, 10000)
+news <- sample(news, 10000)
+twitter <- sample(twitter, 10000)
 ```
 
 We have extracted a sample of 10000 lines from every data type: blogs, news and tweets.
@@ -215,7 +215,9 @@ displayWordcloud("Tweets", twitter)
 ```
 
 As we can see from the word clouds, the blogs and tweets are similar 
-BLAH BLAH BLAH BLAH
+and news word cloud is different. News is dominated by the word "said"
+and the rest of the words tend to be more abstract. Blogs and tweets use
+more concrete and more emotional words, ex. "like".
 
 
 ### Bigrams
@@ -229,31 +231,41 @@ This will show what kind of phrases are most popular in each data type (blog, ne
 # function used to display a barplot of ngrams
 displayNGrams <- function(title, data, n) {
     tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
-    ngrams <- TermDocumentMatrix(data, control=list(tokenize=tokenizer))
+    ngrams <- DocumentTermMatrix(data, control=list(tokenize=tokenizer))
     ngrams <- sort(col_sums(ngrams), decreasing = TRUE)[1:10]
     barplot <- barplot(
         ngrams,
-        #axes = FALSE,
-        #axisnames = FALSE,
+        axes = FALSE,
+        axisnames = FALSE,
         ylab = "Count",
-        ylim = c(0, max(ngram) + 9),
+        ylim = c(0, max(ngrams) + 9),
         main = title
     )
-    #text(bar, par("usr")[3], labels = names(bigramTermsCount),
-    #     srt = 45, adj = c(1.1,1.1), xpd = TRUE, cex = 0.9)
-    #axis(2)    
+    text(
+      barplot,
+      par("usr")[3],
+      labels = names(ngrams),
+      srt = 90,
+      adj = c(1.1, 1.1),
+      xpd = TRUE,
+      cex = 0.9
+    )
+    axis(2)
 }
 
 # bigrams
 par(mfrow = c(1, 3))
-#displayNGrams("Blogs", blogs, 2)
-#displayNGrams("News", news, 2)
-#displayNGrams("Tweets", twitter, 2)
+displayNGrams("Blogs", blogs, 2)
+displayNGrams("News", news, 2)
+displayNGrams("Tweets", twitter, 2)
 ```
 
 ```{r trigrams, cache=TRUE, errors=FALSE, warning=FALSE, message=FALSE, results='asis'}
 # trigrams
 par(mfrow = c(1, 3))
-#displayNGrams("Blogs", blogs, 3)
-#displayNGrams("News", news, 3)
-#displayNGrams("Tweets", twitter, 3)```
+displayNGrams("Blogs", blogs, 3)
+displayNGrams("News", news, 3)
+displayNGrams("Tweets", twitter, 3)
+```
+
+Thank you for your time. Cheers.
