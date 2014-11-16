@@ -67,6 +67,9 @@ the entire dataset will be done only once.
 blogs <- readLines(file("final/en_US/en_US.blogs.txt", encoding = "UTF-8"), n = 10000)
 news <- readLines(file("final/en_US/en_US.news.txt", encoding = "UTF-8"), n = 10000)
 twitter <- readLines(file("final/en_US/en_US.twitter.txt", encoding = "UTF-8"), n = 10000)
+blogs <- iconv(blogs, from = "latin1", to = "UTF-8", sub="")
+news <- iconv(news, from = "latin1", to = "UTF-8", sub="")
+twitter <- iconv(twitter, from = "latin1", to = "UTF-8", sub="")
 
 # calculate basic statistics
 summary <- data.frame(
@@ -77,9 +80,9 @@ summary <- data.frame(
         length(twitter)
     ),
     words = c(
-        sum(sapply(gregexpr(blogs, "\\S+"), length) + 1),
-        sum(sapply(gregexpr(news, "\\S+"), length) + 1),
-        sum(sapply(gregexpr(twitter, "\\S+"), length) + 1)
+        sum(sapply(gregexpr("\\S+", blogs), length) + 1),
+        sum(sapply(gregexpr("\\S+", news), length) + 1),
+        sum(sapply(gregexpr("\\S+", twitter), length) + 1)
     ),
     characters = c(
         sum(sapply(blogs, nchar)),
@@ -87,9 +90,9 @@ summary <- data.frame(
         sum(sapply(twitter, nchar))
     ),
     whitespace = c(
-        sum(sapply(gregexpr(blogs, "\\s+"), length) + 1),
-        sum(sapply(gregexpr(news, "\\s+"), length) + 1),
-        sum(sapply(gregexpr(twitter, "\\s+"), length) + 1)
+        sum(sapply(gregexpr("\\s+", blogs), length) + 1),
+        sum(sapply(gregexpr("\\s+", news), length) + 1),
+        sum(sapply(gregexpr("\\s+", twitter), length) + 1)
     )
 )
 summary$words.per.line <- summary$words / summary$lines
