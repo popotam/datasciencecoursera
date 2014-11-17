@@ -62,47 +62,42 @@ because we do not want to cache the entire dataset (which is over 583MB of text)
 This way only the sample will be cached and the whole process of loading
 the entire dataset will be done only once.
 
-```{r preprocessing, cache=TRUE, errors=FALSE, warning=FALSE, message=FALSE, results='asis'}
-# load data
-blogs <- readLines(file("final/en_US/en_US.blogs.txt", encoding = "UTF-8"))
-news <- readLines(file("final/en_US/en_US.news.txt", encoding = "UTF-8"))
-twitter <- readLines(file("final/en_US/en_US.twitter.txt", encoding = "UTF-8"))
-blogs <- iconv(blogs, from = "latin1", to = "UTF-8", sub="")
-news <- iconv(news, from = "latin1", to = "UTF-8", sub="")
-twitter <- iconv(twitter, from = "latin1", to = "UTF-8", sub="")
+```{r preprocessing, cache=TRUE, errors=FALSE, warning=FALSE, message=FALSE, results='hide'}
+# prepare summarizing function
+summarize <- function(data) {
+  summary <- data.frame(
+      lines = length(data),
+      words = sum(sapply(gregexpr("\\S+", data), length) + 1),
+      characters = sum(sapply(data, nchar)),
+      whitespace = sum(sapply(gregexpr("\\s+", data), length) + 1)
+  )
+  summary$words.per.line <- summary$words / summary$lines
+  summary$characters.per.line <- summary$characters / summary$lines
+  summary$characters.per.word <- (summary$characters - summary$whitespace) / summary$words
 
-# calculate basic statistics
-summary <- data.frame(
-    row.names = c("blogs", "news", "twitter"),
-    lines = c(
-        length(blogs),
-        length(news),
-        length(twitter)
-    ),
-    words = c(
-        sum(sapply(gregexpr("\\S+", blogs), length) + 1),
-        sum(sapply(gregexpr("\\S+", news), length) + 1),
-        sum(sapply(gregexpr("\\S+", twitter), length) + 1)
-    ),
-    characters = c(
-        sum(sapply(blogs, nchar)),
-        sum(sapply(news, nchar)),
-        sum(sapply(twitter, nchar))
-    ),
-    whitespace = c(
-        sum(sapply(gregexpr("\\s+", blogs), length) + 1),
-        sum(sapply(gregexpr("\\s+", news), length) + 1),
-        sum(sapply(gregexpr("\\s+", twitter), length) + 1)
-    )
-)
-summary$words.per.line <- summary$words / summary$lines
-summary$characters.per.line <- summary$characters / summary$lines
-summary$characters.per.word <- (summary$characters - summary$whitespace) / summary$words
+  summary
+}
 
-# extract samples from data
-blogs <- sample(blogs, 10000)
-news <- sample(news, 10000)
-twitter <- sample(twitter, 10000)
+# load, sumarize and sample each data, one at a time to save memory
+blogsData <- readLines(file("final/en_US/en_US.blogs.txt", encoding = "UTF-8"))
+summary <- summarize(blogsData)
+blogs <- sample(blogsData, 10000)
+rm(blogsData)
+
+newsData <- readLines(file("final/en_US/en_US.news.txt", encoding = "UTF-8"))
+summary <- rbind(summary, summarize(newsData))
+news <- sample(newsData, 10000)
+rm(newsData)
+
+twitterDataRaw <- readLines(file("final/en_US/en_US.twitter.txt", encoding = "UTF-8"))
+twitterData <- iconv(twitterDataRaw, from = "latin1", to = "UTF-8", sub = "")
+rm(twitterDataRaw)
+summary <- rbind(summary, summarize(twitterData))
+twitter <- sample(twitterData, 10000)
+rm(twitterData)
+
+# name summary table
+row.names(summary) <- c("Blogs", "News", "Twitter")
 ```
 
 We have extracted a sample of 10000 lines from every data type: blogs, news and tweets.
