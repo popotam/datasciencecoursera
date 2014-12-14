@@ -1,0 +1,59 @@
+Text Prediction App
+========================================================
+author: popotam
+date: 2014-12-14
+
+The App
+========================================================
+
+I have created a ShinyApp.io text prediction widget <br/>
+that can be used to predict the best next word for a given phrase.
+
+![Overview of the App](images/overview.png)
+
+The app is available at: https://popotam.shinyapps.io/prediction_app/
+
+
+Instruction
+========================================================
+
+The app is very easy to operate.
+
+Just enter any phrase into the phrase input box <br/>
+and after some delay a predicted word will appear to the right.
+
+![Detailed view on phrase input and prediction output](images/details.png)
+
+If you are interested in what's going on behind the scenes, <br/>
+there is more output data below the prediction box.
+
+Also, on the left pane there is an explanation of the algorithm.
+
+
+The Algorithm
+========================================================
+
+Word prediction is based completelly on matching words present in input phrase
+with bigrams extracted from the dataset.
+
+The dataset is cleaned by converting the text to lowercase,
+replacing all punctuation with spaces and then removing all
+non-whitespace and non-ascii letter characters.
+Then text is split into words (ommiting the stopwords) and the most frequent
+bigram for each starting word is saved as a prediction material.
+
+The input phrase is cleaned and tokenized in the same way as the dataset.
+
+Then the last word from the phrase is matched with bigrams to produce
+a prediction. If word is not matched, the second last word is tried, etc.
+
+
+Thank you!
+========================================================
+
+<br/><br/>
+## See the app, already...
+
+### https://popotam.shinyapps.io/prediction_app/
+<br/><br/><br/>
+You will be able to enter any phrase and see what comes next.
