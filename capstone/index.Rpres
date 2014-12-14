@@ -2,6 +2,10 @@ Text Prediction App
 ========================================================
 author: popotam
 date: 2014-12-14
+transition: rotate
+transition-speed: slow
+
+
 
 The App
 ========================================================
@@ -12,6 +16,7 @@ that can be used to predict the best next word for a given phrase.
 ![Overview of the App](images/overview.png)
 
 The app is available at: https://popotam.shinyapps.io/prediction_app/
+
 
 
 Instruction
@@ -30,6 +35,7 @@ there is more output data below the prediction box.
 Also, on the left pane there is an explanation of the algorithm.
 
 
+
 The Algorithm
 ========================================================
 
@@ -46,6 +52,7 @@ The input phrase is cleaned and tokenized in the same way as the dataset.
 
 Then the last word from the phrase is matched with bigrams to produce
 a prediction. If word is not matched, the second last word is tried, etc.
+
 
 
 Thank you!
