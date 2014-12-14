@@ -52,11 +52,16 @@ shinyServer(function(input, output) {
         if (length(out) > 0)
             out <- paste('<strong>', out, '</strong>')
         else
-            out <- '<i>-- NO PREDICTION --</i>'
+            out <- '<i>-- no prediction --</i>'
         out
     })
-    output$phrase <- renderPrint({
-        phrase()
+    output$phrase <- renderText({
+        out <- phrase()
+        if (length(out) > 0)
+            out <- paste('<strong>', paste(out), '</strong>')
+        else
+            out <- '<i>-- no input --</i>'
+        out
     })
     output$bigram <- renderText({
         first <- prediction()$first
@@ -64,7 +69,7 @@ shinyServer(function(input, output) {
         if (length(first) > 0 || length(second) > 0)
             out <- paste('<strong>', first, second, '</strong>')
         else
-            out <- '<i>-- NO PREDICTION --</i>'
+            out <- '<i>-- no prediction --</i>'
         out
     })
 })

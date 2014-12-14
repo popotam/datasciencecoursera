@@ -1,7 +1,7 @@
 
 makeBigramsRDS <- function() {
     bigrams <- read.table(
-        '../bigrams.txt',
+        '../sbigrams.txt',
         sep = ' ',
         col.names = c('first', 'second'),
         as.is = TRUE

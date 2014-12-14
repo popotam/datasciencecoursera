@@ -46,20 +46,40 @@ shinyUI(pageWithSidebar(
     mainPanel(
         h5("Inctructions"),
         p("Please use the input below to enter a phrase ",
-          "that will be used to predict a most likely next word."),
+          "that will be used to predict next word."),
         br(),
-        textInput("phrase", "Phrase:"),
 
-        p("Predicted word:"),
+        wellPanel(fluidRow(
+            column(6,
+                   textInput("phrase", "Phrase:")
+            ),
+            column(6,
+                   p("Predicted word:"),
+                   htmlOutput("second")
+            )
+        )),
+        br(),
+        br(),
+        br(),
+        br(),
+
+        h5("Behind the scenes"),
+        p("In this section you can take a glimpse on the inner workings ",
+          "of the algorithm.", br(),
+          "You can see what transformations have been made",
+          "to your input and which bigram was matched and used to predict ",
+          "a word."),
+        br(),
+        p("Your input was tokenized as:"),
         p(
-            style="min-height: 50px",
-            htmlOutput("second", inline=T)
+            style="min-height: 25px; margin-left: 30px",
+            htmlOutput("phrase", inline=T)
         ),
 
-        p("Your input was tokenized as:"),
-        verbatimTextOutput("phrase"),
-
         p("The following bigram was matched:"),
-        verbatimTextOutput("bigram")
+        p(
+            style="min-height: 25px; margin-left: 30px",
+            htmlOutput("bigram", inline=T)
+        )
     )
 ))
