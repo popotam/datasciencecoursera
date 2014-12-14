@@ -53,9 +53,13 @@ shinyUI(pageWithSidebar(
         p("Predicted word:"),
         p(
             style="min-height: 50px",
-            htmlOutput("word", inline=T)
+            htmlOutput("second", inline=T)
         ),
+
         p("Your input was tokenized as:"),
-        verbatimTextOutput("phrase")
+        verbatimTextOutput("phrase"),
+
+        p("The following bigram was matched:"),
+        verbatimTextOutput("bigram")
     )
 ))

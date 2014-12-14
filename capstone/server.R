@@ -1,11 +1,6 @@
 library(shiny)
 
-punctuation <- '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~’'
-acceptable <- 'abcdefghijklmnopqrstuvwxyz '
-stopwords <- c('a', 'the', 'an')
-
 bigrams <- readRDS("data/bigrams.rds")
-
 
 cleanPhrase <- function(phrase) {
     # drop letter case
@@ -19,8 +14,9 @@ cleanPhrase <- function(phrase) {
     words <- words[ nchar(words) > 0 ]
     words <- words[ nchar(words) < 20 ]
     words <- words[ words != 'a' ]
-    words <- words[ words != 'the' ]
     words <- words[ words != 'an' ]
+    words <- words[ words != 'and' ]
+    words <- words[ words != 'the' ]
     words
 }
 
@@ -29,19 +25,46 @@ shinyServer(function(input, output) {
     phrase <- reactive({
         cleanPhrase(input$phrase)
     })
-    
-    output$word <- renderText({
+
+    prediction <- reactive({
         phrase <- phrase()
-        lastWord = phrase[length(phrase)]
-        index <- grep(paste('^', lastWord, '$', sep = ''), bigrams$first)
-        out <- bigrams$second[index]
+        prediction <- list(
+            first = character(0),
+            second = character(0)
+        )
+        for (i in (length(phrase):1)) {
+            first <- phrase[i]
+            index <- grep(paste('^', first, '$', sep = ''), bigrams$first)
+            second <- bigrams$second[index]
+            if (length(second) > 0) {
+                prediction <- list(
+                    first = first,
+                    second = second
+                )
+                break
+            }
+        }
+        prediction
+    })
+    
+    output$second <- renderText({
+        out <- prediction()$second
         if (length(out) > 0)
             out <- paste('<strong>', out, '</strong>')
         else
-            out <- '<i>--NO PREDICTION--</i>'
+            out <- '<i>-- NO PREDICTION --</i>'
         out
     })
     output$phrase <- renderPrint({
         phrase()
+    })
+    output$bigram <- renderText({
+        first <- prediction()$first
+        second <- prediction()$second
+        if (length(first) > 0 || length(second) > 0)
+            out <- paste('<strong>', first, second, '</strong>')
+        else
+            out <- '<i>-- NO PREDICTION --</i>'
+        out
     })
 })

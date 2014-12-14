@@ -3,7 +3,7 @@ from collections import Counter, defaultdict
 import re
 import string
 
-stopwords = ['a', 'the', 'an', 'and']
+stopwords = ['a', 'an', 'and', 'the']
 acceptable = string.ascii_lowercase + ' '
 DATA_FILES = [
     'final/en_US/en_US.blogs.txt',
@@ -71,5 +71,5 @@ def analyze(func, filename, *args):
 
 
 if __name__ == '__main__':
-    #analyze(bigrams, 'bigrams.txt', *DATA_FILES)
-    analyze(trigrams, 'trigrams.txt', *DATA_FILES)
+    analyze(bigrams, 'bigrams.txt', *DATA_FILES)
+    #analyze(trigrams, 'trigrams.txt', *DATA_FILES)
